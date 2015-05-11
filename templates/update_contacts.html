@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block title %}
+    My Contacts
+{% endblock %}
+{% block body %}
+  <h2>{{ self.title() }}</h2>
+  <ul class="messages">
+  <form action="{{ url_for('select_contact') }}" method="post">
+	<select name="contact" onchange='this.form.submit()'>
+		<option value="Select One">Select One</option>
+		{% for contact in contacts %}
+		<option value="{{ contact.contact_name }}">{{ contact.contact_name }}</option>
+		{% endfor %}
+	</select>
+  </form>
+   <form action="{{ url_for('update') }}" method="post">	
+    <dl>
+	  <input type="hidden" name="contact_id" value="{{ selectedContact.contact_id }}">	
+      <dt>Contact Name:
+      <dd><input type="text" name="contact_name" size="30" value="{{ selectedContact.contact_name }}">
+	  <dt>Email:
+      <dd><input type="text" name="email" size="50" value="{{ selectedContact.email }}">
+      <dt>Address:
+      <dd><input type="text" name="address" size="50" value="{{ selectedContact.address }}">
+	  <dt>Phone No:
+      <dd><input type="text" name="phone_no" size="50" value="{{ selectedContact.phone_no }}">
+    </dl>
+    <div class="actions"><input type="submit" value="Modify"></div>
+  </form>
+    <ul class="messages">
+  {% for contact in contacts %}
+    <li>
+    <p>Contact Name: <br><strong>{{ contact.contact_name }}</strong></p>
+	<p><strong>{{ contact.email }}</strong></p>
+	<p><strong>{{ contact.address }}</strong></p>
+	<p><strong>{{ contact.phone_no }}</strong></p>
+  {% else %}
+    <li><em>There's no Contacts so far.</em>
+  {% endfor %}
+  </ul>
+{% endblock %}

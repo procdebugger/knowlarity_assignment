@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block title %}
+      My Contacts
+{% endblock %}
+{% block body %}
+  <h2>{{ self.title() }}</h2>
+  <ul class="messages">
+  <form action="{{ url_for('delete') }}" method="post">
+	<select name="contact">
+		{% for contact in contacts %}
+		<option value="{{ contact.contact_name }}">{{ contact.contact_name }}</option>
+		{% endfor %}
+	</select>
+    <div class="actions"><input type="submit" value="Delete"></div>
+  </form>
+  </ul>
+{% endblock %}
