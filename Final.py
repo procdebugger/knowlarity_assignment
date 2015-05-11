@@ -186,7 +186,7 @@ def update_contacts():
     if g.user:
         selectedContact = None
         contacts=query_db('select contact_name, email, address, phone_no from contact where user_id = ? order by contact_name desc',[session['user_id']])
-        if contacts is None:
+        if not contacts:
             flash("There is no Contacts to Update")
             return redirect(url_for('index'))
         return render_template('update_contacts.html', contacts=contacts ,selectedContact=selectedContact)
@@ -200,11 +200,11 @@ def select_contact():
        if request.method == 'POST':
         flash(request.form['contact'])
         selectedContact=query_db('select contact_id, contact_name, email, address, phone_no from contact where contact_name=? and user_id = ?',[ request.form['contact'],session['user_id']], one=True)
-        if selectedContact is None:
+        if not selectedContact:
             flash("There is no Contacts to Update")
             return redirect(url_for('index'))
         contacts=query_db('select contact_name, email, address, phone_no from contact where user_id = ? order by contact_name desc',[session['user_id']])
-       if contacts is None:
+       if not contacts:
             flash("There is no Contacts to Update")
             return redirect(url_for('index'))
        return render_template('update_contacts.html',selectedContact=selectedContact,contacts=contacts)
@@ -225,9 +225,12 @@ def update():
 def delete_contacts():
     if g.user:
         contacts=query_db('select contact_name from contact where user_id = ? order by contact_name desc',[session['user_id']])
-        if contacts is None:
-            flash("There is no Contacts to Update")
-    return render_template('delete_contacts.html', contacts=contacts)
+       
+    if not contacts:
+          flash("There is no Contacts to Delete")
+          return redirect(url_for('index'))
+    else:
+          return render_template('delete_contacts.html', contacts=contacts)
     error = None
 
 @app.route('/delete' , methods=['GET', 'POST'])
